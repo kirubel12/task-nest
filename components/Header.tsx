@@ -79,7 +79,9 @@ export const Header: React.FC = () => {
 
           {/* Get Started Button */}
           <Button variant="default" size="sm" className="h-9 w-[100px]">
-            Get started
+           <Link href="/sign-up">
+            Get Started
+           </Link>
           </Button>
 
          

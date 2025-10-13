@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button"
-import { ArrowRight, CheckCircle2, Users, Zap } from "lucide-react"
+import { ArrowRight, CheckCircle2, Users, Zap } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export const Hero = () => {
   return (
@@ -14,8 +14,9 @@ export const Hero = () => {
                 The complete platform to manage projects.
               </h1>
               <p className="text-lg text-muted-foreground lg:text-xl leading-relaxed max-w-xl">
-                Your team's toolkit to create workspaces and collaborate with colleagues. Organize tasks, track
-                progress, and ship faster with Task Nest.
+                Your team's toolkit to create workspaces and collaborate with
+                colleagues. Organize tasks, track progress, and ship faster with
+                Task Nest.
               </p>
             </div>
 
@@ -35,9 +36,12 @@ export const Hero = () => {
                   <Users className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-card-foreground mb-1">Team Collaboration</h3>
+                  <h3 className="font-semibold text-card-foreground mb-1">
+                    Team Collaboration
+                  </h3>
                   <p className="text-sm text-muted-foreground">
-                    Create workspaces and invite colleagues to collaborate in real-time
+                    Create workspaces and invite colleagues to collaborate in
+                    real-time
                   </p>
                 </div>
               </div>
@@ -47,7 +51,9 @@ export const Hero = () => {
                   <CheckCircle2 className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-card-foreground mb-1">Task Management</h3>
+                  <h3 className="font-semibold text-card-foreground mb-1">
+                    Task Management
+                  </h3>
                   <p className="text-sm text-muted-foreground">
                     Organize projects with boards, lists, and cards like Jira
                   </p>
@@ -59,9 +65,12 @@ export const Hero = () => {
                   <Zap className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-card-foreground mb-1">Ship Faster</h3>
+                  <h3 className="font-semibold text-card-foreground mb-1">
+                    Ship Faster
+                  </h3>
                   <p className="text-sm text-muted-foreground">
-                    Streamline workflows and boost productivity with automated tracking
+                    Streamline workflows and boost productivity with automated
+                    tracking
                   </p>
                 </div>
               </div>
@@ -69,10 +78,6 @@ export const Hero = () => {
           </div>
         </div>
       </div>
-
-     
-
-    
     </section>
-  )
-}
+  );
+};
