@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "db:generate": "pnpm dlx @better-auth/cli@latest generate",
-    "db:migrate": "pnpm dlx @better-auth/cli@latest migrate"
+    "db:migrate": "pnpm dlx prisma migrate dev",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
