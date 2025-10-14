@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import type { ReactNode } from "react";
+import NextTopLoader from 'nextjs-toploader';
 
 const poppins = Poppins({
   weight: ["400", "600"],
@@ -23,6 +24,7 @@ export default function RootLayout({
       <body
         className={`${poppins.className} antialiased container mx-auto m-4`}
       >
+        <NextTopLoader />
         {children}
       </body>
     </html>

@@ -10,6 +10,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
 import Link from "next/link"
+import { useSession } from "@/lib/auth-client"
+import UserButton from "@/components/UserButton"
 
 interface NavigationItem {
   title: string
@@ -42,6 +44,8 @@ const navigationItems: NavigationItem[] = [
 
 export const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
+  const { data: session } = useSession()
+  const isAuthenticated = !!session?.user
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -51,41 +55,49 @@ export const Header: React.FC = () => {
           <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
             <span className="text-sm font-bold">TN</span>
           </div>
-          <span className="text-xl font-semibold">TaskNest</span>
+          <Link href="/" className="text-xl font-semibold">TaskNest</Link>
         </div>
 
-        {/* Desktop Navigation */}
-        <NavigationMenu className="hidden md:flex mx-6">
-          <NavigationMenuList>
-            {navigationItems.map((item) => (
-              <NavigationMenuItem key={item.title}>
-                <NavigationMenuLink
-                  href={item.href}
-                  className={navigationMenuTriggerStyle()}
-                >
-                  {item.title}
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-            ))}
-          </NavigationMenuList>
-        </NavigationMenu>
+        {/* Desktop Navigation - Only visible when authenticated */}
+        {isAuthenticated && (
+          <NavigationMenu className="hidden md:flex mx-6">
+            <NavigationMenuList>
+              {navigationItems.map((item) => (
+                <NavigationMenuItem key={item.title}>
+                  <NavigationMenuLink
+                    href={item.href}
+                    className={navigationMenuTriggerStyle()}
+                  >
+                    {item.title}
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+              ))}
+            </NavigationMenuList>
+          </NavigationMenu>
+        )}
 
         {/* User Section */}
         <div className="flex items-center gap-2 ml-auto">
-          {/* Login Button */}
-          <Button variant="outline" size="sm" className="hidden sm:flex h-9 w-[70px]">
-            Login
-          </Button>
+          {/* Authentication UI */}
+          {isAuthenticated ? (
+            /* Authenticated User - Show UserButton */
+            <UserButton />
+          ) : (
+            /* Unauthenticated User - Show Login and Sign Up buttons */
+            <>
+              <Button variant="outline" size="sm" className="hidden sm:flex h-9">
+                <Link href="/sign-in" className="flex items-center justify-center">
+                  Sign In
+                </Link>
+              </Button>
+              <Button variant="default" size="sm" className="h-9">
+                <Link href="/sign-up" className="flex items-center justify-center">
+                  Sign Up
+                </Link>
+              </Button>
+            </>
+          )}
 
-          {/* Get Started Button */}
-          <Button variant="default" size="sm" className="h-9 w-[100px]">
-           <Link href="/sign-up">
-            Get Started
-           </Link>
-          </Button>
-
-         
-         
           {/* Mobile Menu Toggle */}
           <Button
             variant="ghost"
@@ -103,26 +115,34 @@ export const Header: React.FC = () => {
         <div className="md:hidden">
           <div className="border-t border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <nav className="container py-4">
-              <div className="space-y-2">
-                {navigationItems.map((item) => (
-                  <Link
-                    key={item.title}
-                    href={item.href}
-                    className="block rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {item.title}
-                  </Link>
-                ))}
-              </div>
-              <div className="mt-4 flex flex-col w-full gap-2">
-                <Button>
-                  <Link href="/sign-in">
-                    Login
-                  </Link>
-                </Button>
-  
-              </div>
+              {/* Navigation Items - Only visible when authenticated */}
+              {isAuthenticated ? (
+                <div className="space-y-2">
+                  {navigationItems.map((item) => (
+                    <Link
+                      key={item.title}
+                      href={item.href}
+                      className="block rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {item.title}
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <div className="mt-4 flex flex-col w-full gap-2">
+                  <Button className="w-full">
+                    <Link href="/sign-in" className="w-full flex items-center justify-center">
+                      Sign In
+                    </Link>
+                  </Button>
+                  <Button variant="outline" className="w-full">
+                    <Link href="/sign-up" className="w-full flex items-center justify-center">
+                      Sign Up
+                    </Link>
+                  </Button>
+                </div>
+              )}
             </nav>
           </div>
         </div>

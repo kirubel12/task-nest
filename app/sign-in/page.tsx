@@ -1,14 +1,28 @@
-import Header from "@/components/Header"
+"use client"
 
-const SignInPage = () => {
+import { Header } from "@/components/Header"
+import { SignInForm } from "@/components/signin-form"
+import { useSession } from "@/lib/auth-client"
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
+
+export default function SignInPage() {
+  const { data } = useSession()
+  const router = useRouter()
+  const isAuthenticated = data?.user !== null
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/")
+    }
+  }, [isAuthenticated, router])
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <div>
-        <h1>Sign In</h1>
+      <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+        <div className="w-full max-w-lg">
+          <SignInForm />
+        </div>
       </div>
     </div>
   )
 }
-
-export default SignInPage
