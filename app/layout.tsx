@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import type { ReactNode } from "react";
 import NextTopLoader from 'nextjs-toploader';
+import { ToastProvider } from "@/components/toast-provider";
 
 const poppins = Poppins({
   weight: ["400", "600"],
@@ -26,6 +27,7 @@ export default function RootLayout({
       >
         <NextTopLoader />
         {children}
+        <ToastProvider />
       </body>
     </html>
   );

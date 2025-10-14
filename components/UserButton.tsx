@@ -1,5 +1,4 @@
 "use client"
-
 import { useSession, signOut } from "@/lib/auth-client"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -13,10 +12,20 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { LogOut, Settings, User } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export default function UserButton() {
     const { data } = useSession()
     const user = data?.user
+    const router = useRouter()
+    const handleSignOut = async () => {
+        await signOut()
+        // Wait a brief moment for the session state to update and cookies to clear
+        // before redirecting to allow proper navigation to auth pages
+        setTimeout(() => {
+            router.push("/")
+        }, 100)
+    }
 
     if (!user) {
         return null
@@ -67,7 +76,7 @@ export default function UserButton() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                     className="text-red-600 focus:text-red-600"
-                    onClick={() => signOut()}
+                    onClick={handleSignOut}
                 >
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Log out</span>

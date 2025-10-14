@@ -12,6 +12,7 @@ import { Menu, X } from "lucide-react"
 import Link from "next/link"
 import { useSession } from "@/lib/auth-client"
 import UserButton from "@/components/UserButton"
+import { usePathname } from "next/navigation"
 
 interface NavigationItem {
   title: string
@@ -45,6 +46,7 @@ const navigationItems: NavigationItem[] = [
 export const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
   const { data: session } = useSession()
+  const pathname = usePathname()
   const isAuthenticated = !!session?.user
 
   return (
@@ -62,16 +64,23 @@ export const Header: React.FC = () => {
         {isAuthenticated && (
           <NavigationMenu className="hidden md:flex mx-6">
             <NavigationMenuList>
-              {navigationItems.map((item) => (
-                <NavigationMenuItem key={item.title}>
-                  <NavigationMenuLink
-                    href={item.href}
-                    className={navigationMenuTriggerStyle()}
-                  >
-                    {item.title}
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              ))}
+              {navigationItems.map((item) => {
+                const isActive = pathname === item.href
+                return (
+                  <NavigationMenuItem key={item.title}>
+                    <NavigationMenuLink
+                      href={item.href}
+                      className={`${navigationMenuTriggerStyle()} transition-all duration-200 ${
+                        isActive 
+                          ? 'bg-secondary text-accent-foreground font-medium' 
+                          : 'hover:bg-accent/80 hover:text-accent-foreground'
+                      }`}
+                    >
+                      {item.title}
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                )
+              })}
             </NavigationMenuList>
           </NavigationMenu>
         )}
@@ -118,16 +127,23 @@ export const Header: React.FC = () => {
               {/* Navigation Items - Only visible when authenticated */}
               {isAuthenticated ? (
                 <div className="space-y-2">
-                  {navigationItems.map((item) => (
-                    <Link
-                      key={item.title}
-                      href={item.href}
-                      className="block rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      {item.title}
-                    </Link>
-                  ))}
+                  {navigationItems.map((item) => {
+                    const isActive = pathname === item.href
+                    return (
+                      <Link
+                        key={item.title}
+                        href={item.href}
+                        className={`block rounded-md px-3 py-2 text-sm font-medium transition-all duration-200 ${
+                          isActive 
+                            ? 'bg-secondary text-accent-foreground font-medium' 
+                            : 'hover:bg-accent/80 hover:text-accent-foreground'
+                        }`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {item.title}
+                      </Link>
+                    )
+                  })}
                 </div>
               ) : (
                 <div className="mt-4 flex flex-col w-full gap-2">

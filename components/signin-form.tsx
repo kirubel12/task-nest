@@ -5,7 +5,8 @@ import { useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
+import { toast } from 'react-toastify'
 
 import { signIn } from "@/lib/auth-client"
 import { Button } from "@/components/ui/button"
@@ -38,6 +39,8 @@ type FormData = z.infer<typeof formSchema>
 export function SignInForm({ className, ...props }: React.ComponentProps<typeof Card>) {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get('redirect') || '/'
   
   const {
     register,
@@ -58,10 +61,11 @@ export function SignInForm({ className, ...props }: React.ComponentProps<typeof 
         const { data, error } = await signIn.email({
           email: values.email,
           password: values.password,
-          callbackURL: "/",
+          callbackURL: redirectTo,
         })
 
         if (error) {
+          toast.error(error.message || "Invalid email or password. Please try again.")
           setError("root", {
             message: error.message || "Invalid email or password. Please try again.",
           })
@@ -69,11 +73,13 @@ export function SignInForm({ className, ...props }: React.ComponentProps<typeof 
         }
 
         if (data) {
-          // Successful login - the callback URL will handle redirection
-          router.push("/")
+          // Successful login - redirect to the intended page
+          toast.success("Welcome back! You have been signed in successfully.")
+          router.push(redirectTo)
           console.log("Login successful:", data)
         }
       } catch (error) {
+        toast.error("An unexpected error occurred. Please try again.")
         setError("root", {
           message: "An unexpected error occurred. Please try again.",
         })

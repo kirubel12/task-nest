@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 
 import { signUp } from "@/lib/auth-client"
+import { toast } from 'react-toastify'
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -73,6 +74,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<typeof 
         })
 
         if (error) {
+          toast.error(error.message || "Something went wrong. Please try again.")
           setError("root", {
             message: error.message || "Something went wrong. Please try again.",
           })
@@ -84,13 +86,14 @@ export function SignupForm({ className, ...props }: React.ComponentProps<typeof 
           values.email = ""
           values.password = ""
           values.passwordConfirmation = ""
+          toast.success("Account created successfully! Please sign in to continue.")
           router.push("/sign-in")
-
 
           // Successful signup - the callback URL will handle redirection
           console.log("Signup successful:", data)
         }
       } catch (error) {
+        toast.error("An unexpected error occurred. Please try again.")
         setError("root", {
           message: "An unexpected error occurred. Please try again.",
         })
