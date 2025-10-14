@@ -1,5 +1,6 @@
 import { ArrowRight, CheckCircle2, Users, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export const Hero = () => {
   return (
@@ -22,7 +23,9 @@ export const Hero = () => {
 
             <div className="flex flex-col gap-4 sm:flex-row sm:gap-4">
               <Button size="lg" className="text-base font-medium">
-                Get started free
+                <Link href="/sign-up">
+                create an account
+                </Link>
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </div>

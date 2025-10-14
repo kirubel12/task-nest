@@ -101,7 +101,7 @@ export const Header: React.FC = () => {
               </Button>
               <Button variant="default" size="sm" className="h-9">
                 <Link href="/sign-up" className="flex items-center justify-center">
-                  Sign Up
+                  create an account
                 </Link>
               </Button>
             </>
@@ -154,8 +154,7 @@ export const Header: React.FC = () => {
                   </Button>
                   <Button variant="outline" className="w-full">
                     <Link href="/sign-up" className="w-full flex items-center justify-center">
-                      Sign Up
-                    </Link>
+create an account                    </Link>
                   </Button>
                 </div>
               )}
