@@ -12,6 +12,7 @@ datasource db {
 
 model User {
   id            String    @id @default(uuid())
+  username      String    @unique
   name          String
   email         String    @unique
   emailVerified Boolean   @default(false) @map("email_verified")
@@ -20,6 +21,8 @@ model User {
   updatedAt     DateTime  @default(now()) @updatedAt @map("updated_at")
   sessions      Session[]
   accounts      Account[]
+
+  displayUsername String?
 
   @@map("user")
 }
@@ -43,6 +46,7 @@ model Account {
   accountId             String    @map("account_id")
   providerId            String    @map("provider_id")
   userId                String    @map("user_id")
+  username              String?   @map("username")
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?   @map("access_token")
   refreshToken          String?   @map("refresh_token")

@@ -29,6 +29,9 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
   }),
+  username: z.string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
@@ -57,6 +60,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<typeof 
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      username: "",
       email: "",
       password: "",
       passwordConfirmation: "",
@@ -68,6 +72,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<typeof 
       try {
         const { data, error } = await signUp.email({
           name: values.name,
+          username: values.username,
           email: values.email,
           password: values.password,
           callbackURL: "/sign-in",
@@ -86,6 +91,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<typeof 
           values.email = ""
           values.password = ""
           values.passwordConfirmation = ""
+          values.username = ""
           toast.success("Account created successfully! Please sign in to continue.")
           router.push("/sign-in")
 
@@ -125,6 +131,21 @@ export function SignupForm({ className, ...props }: React.ComponentProps<typeof 
               />
               {errors.name && (
                 <FieldError id="name-error">{errors.name.message}</FieldError>
+              )}
+            </Field>
+
+            <Field>
+              <FieldLabel htmlFor="username">Username</FieldLabel>
+              <Input
+                {...register("username")}
+                id="username"
+                type="text"
+                placeholder="johndoe"
+                disabled={isPending}
+                aria-describedby={errors.username ? "username-error" : undefined}
+              />
+              {errors.username && (
+                <FieldError id="username-error">{errors.username.message}</FieldError>
               )}
             </Field>
 
