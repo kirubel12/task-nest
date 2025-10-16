@@ -3,11 +3,12 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "@/lib/prisma";
 import { createAuthMiddleware } from "better-auth/api";
 import { twoFactor, username } from "better-auth/plugins"
-
+import dotenv from "dotenv"
+dotenv.config()
 export const auth = betterAuth({
   appName: "Task Nest",
-  baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
-  secret: process.env.BETTER_AUTH_SECRET || "your-secret-key-here",
+  baseURL: process.env.BETTER_AUTH_URL!,
+  secret: process.env.BETTER_AUTH_SECRET!,
   database: prismaAdapter(prisma, {
     provider: "postgresql"
   }), 
