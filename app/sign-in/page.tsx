@@ -2,9 +2,6 @@ import { Header } from "@/components/Header"
 import { SignInWrapper } from "@/components/signin-wrapper"
 import { redirectIfAuthenticated } from "@/lib/auth-server"
 
-// Force dynamic rendering since we use headers() for authentication
-export const dynamic = 'force-dynamic'
-
 export default async function SignInPage() {
   // Redirect to home if user is already authenticated
   await redirectIfAuthenticated("/")

@@ -15,6 +15,9 @@ export const metadata: Metadata = {
   description: "Task nest all in one for your productivity",
 };
 
+// Force dynamic rendering globally for all routes that use authentication
+export const dynamic = 'force-dynamic'
+
 export default function RootLayout({
   children,
 }: Readonly<{

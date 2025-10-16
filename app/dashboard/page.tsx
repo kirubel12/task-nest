@@ -1,9 +1,6 @@
 import { Header } from "@/components/Header";
 import { requireAuth } from "@/lib/auth-server";
 
-// Force dynamic rendering since we use headers() for authentication
-export const dynamic = 'force-dynamic'
-
 export default async function DashboardPage() {
   // This will redirect to sign-in if user is not authenticated
   const session = await requireAuth();
