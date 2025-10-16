@@ -15,10 +15,11 @@ import { twoFactor, useSession } from "@/lib/auth-client"
 import QRCode from "react-qr-code"
 
 interface TwoFactorTabProps {
+  isEnabled?: boolean
   onToggle?: (enabled: boolean) => void
 }
 
-export function TwoFactorTab({ onToggle }: TwoFactorTabProps) {
+export function TwoFactorTab({ isEnabled: propIsEnabled, onToggle }: TwoFactorTabProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [showSetup, setShowSetup] = useState(false)
   const [verificationCode, setVerificationCode] = useState("")
@@ -27,8 +28,8 @@ export function TwoFactorTab({ onToggle }: TwoFactorTabProps) {
   const [backupCodes, setBackupCodes] = useState<string[]>([])
   const { data: session } = useSession()
   
-  // Get 2FA status from user session
-  const isEnabled = session?.user?.twoFactorEnabled ?? false
+  // Get 2FA status from props or user session
+  const isEnabled = propIsEnabled ?? session?.user?.twoFactorEnabled ?? false
 
   const handleDisable2FA = async () => {
     // Disable 2FA - need password confirmation
