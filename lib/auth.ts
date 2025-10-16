@@ -2,7 +2,7 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "@/lib/prisma";
 import { createAuthMiddleware } from "better-auth/api";
-import { username } from "better-auth/plugins"
+import { twoFactor, username } from "better-auth/plugins"
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -14,7 +14,10 @@ export const auth = betterAuth({
 
   },
   plugins: [ 
-    username() 
+    username() ,
+    twoFactor({
+      
+    })
 ] 
  
 });

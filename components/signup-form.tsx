@@ -69,42 +69,36 @@ export function SignupForm({ className, ...props }: React.ComponentProps<typeof 
 
   const onSubmit = handleSubmit((values) => {
     startTransition(async () => {
-      try {
-        const { data, error } = await signUp.email({
+     
+      const { data, error } = await signUp.email({
           name: values.name,
           username: values.username,
           email: values.email,
           password: values.password,
           callbackURL: "/sign-in",
-        })
-
-        if (error) {
-          toast.error(error.message || "Something went wrong. Please try again.")
-          setError("root", {
-            message: error.message || "Something went wrong. Please try again.",
-          })
-          return
-        }
-
-        if (data) {
+        },
+      {
+        onRequest: ()=> {
+          toast.dismiss()
+          toast.loading("Creating account...")
+        },
+        onSuccess: ()=> {
+          toast.dismiss()
+          toast.success("Account created successfully!")
+          router.push("/sign-in")
           values.name = ""
           values.email = ""
           values.password = ""
           values.passwordConfirmation = ""
           values.username = ""
-          toast.success("Account created successfully! Please sign in to continue.")
-          router.push("/sign-in")
-
-          // Successful signup - the callback URL will handle redirection
-          console.log("Signup successful:", data)
+        },
+        onError: ({error})=> {
+          toast.dismiss()
+          toast.error(error.message)
         }
-      } catch (error) {
-        toast.error("An unexpected error occurred. Please try again.")
-        setError("root", {
-          message: "An unexpected error occurred. Please try again.",
-        })
-        console.error("Sign up failed:", error)
-      }
+      })
+
+
     })
   })
 

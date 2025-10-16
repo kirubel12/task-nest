@@ -57,36 +57,32 @@ export function SignInForm({ className, ...props }: React.ComponentProps<typeof 
 
   const onSubmit = handleSubmit((values) => {
     startTransition(async () => {
-      try {
+      
         const { data, error } = await signIn.email({
           email: values.email,
           password: values.password,
           callbackURL: redirectTo,
+        },
+        {
+          onRequest: ()=> {
+            toast.dismiss()
+            toast.loading("Signing in...",{theme: "colored"})
+          },
+          onSuccess: ()=> {
+            toast.dismiss()
+            toast.success("Welcome back! You have been signed in successfully.")
+            router.push(redirectTo)
+          },
+          onError: ({error})=> {
+            toast.dismiss()
+            toast.error(error.message)
+          }
         })
 
-        if (error) {
-          toast.error(error.message || "Invalid email or password. Please try again.")
-          setError("root", {
-            message: error.message || "Invalid email or password. Please try again.",
-          })
-          return
-        }
 
-        if (data) {
-          // Successful login - redirect to the intended page
-          toast.success("Welcome back! You have been signed in successfully.")
-          router.push(redirectTo)
-          console.log("Login successful:", data)
-        }
-      } catch (error) {
-        toast.error("An unexpected error occurred. Please try again.")
-        setError("root", {
-          message: "An unexpected error occurred. Please try again.",
-        })
-        console.error("Sign in failed:", error)
-      }
     })
   })
+
 
   return (
     <Card className={className} {...props}>
