@@ -24,7 +24,7 @@ model User {
 
   displayUsername String?
 
-  twoFactorEnabled Boolean?    @default(false)
+  twoFactorEnabled Boolean     @default(false) @map("two_factor_enabled")
   twofactors       TwoFactor[]
 
   @@map("user")

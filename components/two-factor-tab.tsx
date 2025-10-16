@@ -15,11 +15,10 @@ import { twoFactor, useSession } from "@/lib/auth-client"
 import QRCode from "react-qr-code"
 
 interface TwoFactorTabProps {
-  isEnabled: boolean
-  onToggle: (enabled: boolean) => void
+  onToggle?: (enabled: boolean) => void
 }
 
-export function TwoFactorTab({ isEnabled, onToggle }: TwoFactorTabProps) {
+export function TwoFactorTab({ onToggle }: TwoFactorTabProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [showSetup, setShowSetup] = useState(false)
   const [verificationCode, setVerificationCode] = useState("")
@@ -27,34 +26,43 @@ export function TwoFactorTab({ isEnabled, onToggle }: TwoFactorTabProps) {
   const [totpUri, setTotpUri] = useState("")
   const [backupCodes, setBackupCodes] = useState<string[]>([])
   const { data: session } = useSession()
+  
+  // Get 2FA status from user session
+  const isEnabled = session?.user?.twoFactorEnabled ?? false
 
-  const handleToggle2FA = async () => {
-    if (isEnabled) {
-      // Disable 2FA - need password confirmation
-      if (!password) {
-        toast.error("Please enter your password to disable 2FA")
-        return
-      }
-      
-      setIsLoading(true)
-      toast.dismiss()
-      
-      const { data, error } = await twoFactor.disable({
-        password
-      })
-      
-      if (error) {
-        toast.error(error.message || "Failed to disable 2FA")
-      } else {
-        toast.success("2FA disabled successfully")
-        onToggle(false)
-        setPassword("")
-      }
-      setIsLoading(false)
-    } else {
-      // Show setup process
-      setShowSetup(true)
+  const handleDisable2FA = async () => {
+    // Disable 2FA - need password confirmation
+    if (!password) {
+      toast.error("Please enter your password to disable 2FA")
+      return
     }
+    
+    setIsLoading(true)
+    toast.dismiss()
+    
+    const { data, error } = await twoFactor.disable({
+      password
+    })
+    
+    if (error) {
+      toast.error(error.message || "Failed to disable 2FA")
+    } else {
+      toast.success("2FA disabled successfully")
+      onToggle?.(false)
+      setPassword("")
+    }
+    setIsLoading(false)
+  }
+
+  const handleToggle2FA = async (shouldEnable: boolean) => {
+    if (shouldEnable && !isEnabled) {
+      // User wants to enable 2FA
+      handleEnable2FA()
+    } else if (!shouldEnable && isEnabled) {
+      // User wants to disable 2FA
+      handleDisable2FA()
+    }
+    // If the state is already what the user wants, do nothing
   }
 
   const handleEnable2FA = async () => {
@@ -130,7 +138,7 @@ export function TwoFactorTab({ isEnabled, onToggle }: TwoFactorTabProps) {
       toast.error(error.message || "Invalid verification code")
     } else {
       toast.success("2FA enabled successfully!")
-      onToggle(true)
+      onToggle?.(true)
       setShowSetup(false)
       setVerificationCode("")
       setPassword("")
@@ -186,13 +194,7 @@ export function TwoFactorTab({ isEnabled, onToggle }: TwoFactorTabProps) {
                 </div>
                 <Switch 
                   checked={isEnabled} 
-                  onCheckedChange={(checked) => {
-                    if (checked) {
-                      handleEnable2FA()
-                    } else {
-                      handleToggle2FA()
-                    }
-                  }} 
+                  onCheckedChange={handleToggle2FA}
                   disabled={isLoading} 
                 />
               </div>
@@ -239,7 +241,7 @@ export function TwoFactorTab({ isEnabled, onToggle }: TwoFactorTabProps) {
                   </Button>
                 </div>
 
-                <Button variant="destructive" onClick={handleToggle2FA} disabled={isLoading}>
+                <Button variant="destructive" onClick={handleDisable2FA} disabled={isLoading}>
                   {isLoading ? "Disabling..." : "Disable 2FA"}
                 </Button>
               </div>
