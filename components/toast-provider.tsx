@@ -7,7 +7,7 @@ export function ToastProvider() {
   return (
     <ToastContainer
       position="top-right"
-      autoClose={5000}
+      autoClose={2000}
       hideProgressBar={false}
       newestOnTop={false}
       closeOnClick
@@ -15,7 +15,7 @@ export function ToastProvider() {
       pauseOnFocusLoss
       draggable
       pauseOnHover
-      theme="light"
+      theme="colored"
     />
   );
 }

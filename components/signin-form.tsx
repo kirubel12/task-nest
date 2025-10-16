@@ -68,10 +68,16 @@ export function SignInForm({ className, ...props }: React.ComponentProps<typeof 
             toast.dismiss()
             toast.loading("Signing in...",{theme: "colored"})
           },
-          onSuccess: ()=> {
+          onSuccess: (context)=> {
             toast.dismiss()
-            toast.success("Welcome back! You have been signed in successfully.")
-            router.push(redirectTo)
+            if (context.data.twoFactorRedirect) {
+              toast.info("Please complete two-factor authentication")
+              // You can redirect to a 2FA verification page here
+              router.push("/two-factor")
+            } else {
+              toast.success("Welcome back! You have been signed in successfully.")
+              router.push(redirectTo)
+            }
           },
           onError: ({error})=> {
             toast.dismiss()

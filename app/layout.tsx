@@ -27,7 +27,7 @@ export default function RootLayout({
       >
         <NextTopLoader />
         {children}
-        <ToastProvider />
+        <ToastProvider  />
       </body>
     </html>
   );
