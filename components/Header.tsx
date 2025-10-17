@@ -13,6 +13,7 @@ import Link from "next/link"
 import { useSession } from "@/lib/auth-client"
 import UserButton from "@/components/UserButton"
 import { usePathname } from "next/navigation"
+import { NotificationCard } from "./notification-card"
 
 interface NavigationItem {
   title: string
@@ -70,11 +71,10 @@ export const Header: React.FC = () => {
                   <NavigationMenuItem key={item.title}>
                     <NavigationMenuLink
                       href={item.href}
-                      className={`${navigationMenuTriggerStyle()} transition-all duration-200 ${
-                        isActive 
-                          ? 'bg-secondary text-accent-foreground font-medium' 
-                          : 'hover:bg-accent/80 hover:text-accent-foreground'
-                      }`}
+                      className={`${navigationMenuTriggerStyle()} transition-all duration-200 ${isActive
+                        ? 'bg-secondary text-accent-foreground font-medium'
+                        : 'hover:bg-accent/80 hover:text-accent-foreground'
+                        }`}
                     >
                       {item.title}
                     </NavigationMenuLink>
@@ -89,8 +89,10 @@ export const Header: React.FC = () => {
         <div className="flex items-center gap-2 ml-auto">
           {/* Authentication UI */}
           {isAuthenticated ? (
-            /* Authenticated User - Show UserButton */
-            <UserButton />
+            <div className="flex items-center gap-6">
+              <NotificationCard />
+              <UserButton />
+            </div>
           ) : (
             /* Unauthenticated User - Show Login and Sign Up buttons */
             <>
@@ -133,11 +135,10 @@ export const Header: React.FC = () => {
                       <Link
                         key={item.title}
                         href={item.href}
-                        className={`block rounded-md px-3 py-2 text-sm font-medium transition-all duration-200 ${
-                          isActive 
-                            ? 'bg-secondary text-accent-foreground font-medium' 
-                            : 'hover:bg-accent/80 hover:text-accent-foreground'
-                        }`}
+                        className={`block rounded-md px-3 py-2 text-sm font-medium transition-all duration-200 ${isActive
+                          ? 'bg-secondary text-accent-foreground font-medium'
+                          : 'hover:bg-accent/80 hover:text-accent-foreground'
+                          }`}
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         {item.title}
@@ -154,7 +155,7 @@ export const Header: React.FC = () => {
                   </Button>
                   <Button variant="outline" className="w-full">
                     <Link href="/sign-up" className="w-full flex items-center justify-center">
-create an account                    </Link>
+                      create an account                    </Link>
                   </Button>
                 </div>
               )}

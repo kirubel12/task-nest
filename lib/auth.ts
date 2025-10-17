@@ -1,8 +1,9 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "@/lib/prisma";
-import { createAuthMiddleware } from "better-auth/api";
 import { twoFactor, username } from "better-auth/plugins"
+import { nextCookies } from "better-auth/next-js";
+
 export const auth = betterAuth({
   appName: "Task Nest",
   baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000",
@@ -19,6 +20,7 @@ export const auth = betterAuth({
     twoFactor({
       issuer: "Task Nest",
       skipVerificationOnEnable: false // Require verification before enabling
-    })
+    }),
+    nextCookies()
   ] 
 });
