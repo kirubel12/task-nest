@@ -72,8 +72,8 @@ export const Header: React.FC = () => {
                     <NavigationMenuLink
                       href={item.href}
                       className={`${navigationMenuTriggerStyle()} transition-all duration-200 ${isActive
-                        ? 'bg-secondary text-accent-foreground font-medium'
-                        : 'hover:bg-accent/80 hover:text-accent-foreground'
+                        ? 'bg-primary text-primary-foreground font-medium'
+                        : 'hover:bg-primary/50 hover:text-primary-foreground'
                         }`}
                     >
                       {item.title}
