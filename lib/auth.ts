@@ -15,6 +15,13 @@ export const auth = betterAuth({
     enabled: true,
     autoSignIn: false
   },
+  session: {
+    // Enable cookie caching for much faster session checks
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60 // Cache for 5 minutes
+    }
+  },
   plugins: [ 
     username(),
     twoFactor({

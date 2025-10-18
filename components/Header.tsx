@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
 import Link from "next/link"
-import { useSession } from "@/lib/auth-client"
+import { useFastAuth } from "@/hooks/use-fast-auth"
 import UserButton from "@/components/UserButton"
 import { usePathname } from "next/navigation"
 import { NotificationCard } from "./notification-card"
@@ -46,9 +46,8 @@ const navigationItems: NavigationItem[] = [
 
 export const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
-  const { data: session } = useSession()
+  const { isAuthenticated, isLoading, session } = useFastAuth()
   const pathname = usePathname()
-  const isAuthenticated = !!session?.user
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -88,7 +87,13 @@ export const Header: React.FC = () => {
         {/* User Section */}
         <div className="flex items-center gap-2 ml-auto">
           {/* Authentication UI */}
-          {isAuthenticated ? (
+          {isLoading ? (
+            /* Loading state - show minimal skeleton */
+            <div className="flex items-center gap-2">
+              <div className="h-9 w-16 bg-muted animate-pulse rounded-md hidden sm:block" />
+              <div className="h-9 w-24 bg-muted animate-pulse rounded-md" />
+            </div>
+          ) : isAuthenticated ? (
             <div className="flex items-center gap-6">
               <NotificationCard />
               <UserButton />
@@ -127,7 +132,14 @@ export const Header: React.FC = () => {
           <div className="border-t border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <nav className="container py-4">
               {/* Navigation Items - Only visible when authenticated */}
-              {isAuthenticated ? (
+              {isLoading ? (
+                /* Loading state for mobile menu */
+                <div className="space-y-2">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className="h-10 bg-muted animate-pulse rounded-md" />
+                  ))}
+                </div>
+              ) : isAuthenticated ? (
                 <div className="space-y-2">
                   {navigationItems.map((item) => {
                     const isActive = pathname === item.href
